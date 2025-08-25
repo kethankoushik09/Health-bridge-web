@@ -103,7 +103,7 @@ function Navbar() {
               </Link>
             </li>
             <li>
-              <Link to="/create-account" onClick={() => setIsOpen(false)}>
+              <Link to="/register" onClick={() => setIsOpen(false)}>
                 <button className="btn btn-sm btn-primary w-full">
                   Create Account
                 </button>
