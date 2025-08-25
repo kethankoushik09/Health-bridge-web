@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+
 export default function TopDoctors() {
   const doctors = useSelector((state) => state.doctors.list);
 
@@ -18,7 +19,9 @@ export default function TopDoctors() {
 
       {/* Doctors Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
         {topDoctors.map((doc) => (
+           <Link to={`/appointment/${doc.id}`} key={doc.id}>
           <div
             key={doc.id}
             className="card bg-blue-50 shadow-md hover:shadow-xl transition"
@@ -51,8 +54,10 @@ export default function TopDoctors() {
               <p className="text-sm text-gray-600">{doc.specialization}</p>
             </div>
           </div>
+          </Link>
         ))}
       </div>
+
 
       {/* More Button */}
       <div className="flex justify-center mt-10">

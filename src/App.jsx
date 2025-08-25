@@ -3,6 +3,7 @@ import Navbar from "./Components/Navbar/navbar.jsx";
 import DocPage from "./pages/AllDoctors/Doctors.jsx";
 import LoginForm from "./Components/Login/login.jsx";
 import Home from "./pages/Home/home.jsx";
+import DoctorProfile from "./Components/Doctors/docDetail.jsx";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/all-doctors" element={<DocPage />} />
         <Route path="/register" element={<LoginForm/>} />
+        <Route path="/appointment/:id" element={<DoctorProfile />} />
       </Routes>
     </div>
   );
