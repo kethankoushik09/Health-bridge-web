@@ -20,9 +20,14 @@ export default function AuthForm() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-100">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-sm">
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-600">
+        <h2 className="text-2xl font-bold text-center mb-3 text-blue-600">
           {isSignUp ? "Sign Up" : "Sign In"}
         </h2>
+        <p className="text-sm text-gray-500 text-center mb-4">
+          {isSignUp
+            ? "Please signup to book appointment"
+            : "Please login to book appointment"}
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {isSignUp && (
