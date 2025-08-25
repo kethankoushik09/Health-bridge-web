@@ -39,7 +39,7 @@ function Navbar() {
         <Link to="/admin-panel" className="btn btn-sm btn-outline btn-primary">
           Admin Panel
         </Link>
-        <Link to="/create-account">
+        <Link to="/register">
           <button className="btn btn-sm btn-primary">Create Account</button>
         </Link>
       </div>

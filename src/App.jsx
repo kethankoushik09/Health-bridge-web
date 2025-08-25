@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar/navbar.jsx";
 import DocPage from "./pages/AllDoctors/Doctors.jsx";
+import LoginForm from "./Components/Login/login.jsx";
 import Home from "./pages/Home/home.jsx";
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/all-doctors" element={<DocPage />} />
+        <Route path="/register" element={<LoginForm/>} />
       </Routes>
     </div>
   );
