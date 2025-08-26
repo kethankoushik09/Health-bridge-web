@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 import { useSelector } from "react-redux";
+import { User, CalendarCheck, LogOut } from "lucide-react";
 
 function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const isLoggin = useSelector((state) => state.user);
-  console.log(isLoggin?.image);
+  const [isOpen, setIsOpen] = useState(true);
+  // const isLoggin = useSelector((state) => state.user);
+  const isLoggin = true;
+  // console.log(isLoggin?.image);
 
   return (
     <div className="navbar bg-white shadow-md px-6 sticky top-0 z-50">
@@ -45,27 +47,38 @@ function Navbar() {
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src={isLoggin.image}
-              />
+            <div className="w-7 rounded-full  ring-offset-2">
+              <img alt="User Avatar" src={isLoggin.image} />
+               
             </div>
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-white text-blue-600 rounded-box z-10 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-white text-gray-800 rounded-2xl z-10 mt-3 w-56 p-2 shadow-lg border border-gray-100"
           >
             <li>
-              <a className="justify-between hover:bg-blue-100">
-                Profile
-              </a>
+              <Link
+                to="/profile"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 transition"
+              >
+                 <User className="w-5 h-5 text-blue-600" />
+                My Profile
+              </Link>
             </li>
             <li>
-              <a className="hover:bg-blue-100">Appointments</a>
+              <Link
+                to="/appointments"
+                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 transition"
+              >
+                 <CalendarCheck className="w-5 h-5 text-blue-600" />
+                Appointments
+              </Link>
             </li>
             <li>
-              <a className="hover:bg-blue-100">Logout</a>
+              <button className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 transition w-full text-left">
+                 <LogOut className="w-5 h-5 text-red-600" />
+                <span className="text-red-600">Logout</span>
+              </button>
             </li>
           </ul>
         </div>

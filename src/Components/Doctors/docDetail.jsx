@@ -1,8 +1,10 @@
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useState } from "react";
+import { addAppointment } from "../../Redux/Appointments/appointmentsSlice";
 
 export default function DoctorProfile() {
+  const dispatch=useDispatch()
   const { id } = useParams();
   const doctor = useSelector((state) =>
     state.doctors.list.find((doc) => doc.id === parseInt(id))
@@ -32,6 +34,16 @@ export default function DoctorProfile() {
       alert("Please select a time slot before booking!");
       return;
     }
+
+    const appointment = {
+      id: Date.now(),
+      doctor,
+      day: selectedDay,
+      time: selectedSlot,
+    };
+
+    dispatch(addAppointment(appointment));
+
     alert(
       `✅ Appointment booked with ${doctor.name} on ${selectedDay} at ${selectedSlot}`
     );
