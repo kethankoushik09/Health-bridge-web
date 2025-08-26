@@ -1,19 +1,47 @@
+import axios from "axios";
 import { useState } from "react";
+import { BASE_URL } from "../../utils/constant";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../Redux/User/userSlice";
 
 export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const disptach = useDispatch();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isSignUp) {
-      console.log("Sign Up Data:", { name, email, password });
-      // TODO: Add SignUp API call
-    } else {
-      console.log("Sign In Data:", { email, password });
-      // TODO: Add SignIn API call
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const formdata = new FormData();
+      formdata.append("email", email);
+      formdata.append("password", password);
+
+      if (isSignUp) {
+        formdata.append("name", name);
+        const res = await axios.post(
+          BASE_URL + "/api/user/register",
+          formdata,
+          { withCredentials: true }
+        );
+
+        disptach(setUser(res.data.user));
+        navigate("/");
+        toast.success(res.data.message);
+      } else {
+        const res = await axios.post(BASE_URL + "/api/user/login", formdata, {
+          withCredentials: true,
+        });
+        disptach(setUser(res.data.user));
+        navigate("/");
+        toast.success(res.data.message);
+      }
+    } catch (err) {
+      console.log(err.message);
     }
   };
 

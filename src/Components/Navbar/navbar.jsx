@@ -2,9 +2,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
+import { useSelector } from "react-redux";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const isLoggin = useSelector((state) => state.user);
+  console.log(isLoggin?.image);
 
   return (
     <div className="navbar bg-white shadow-md px-6 sticky top-0 z-50">
@@ -35,14 +38,50 @@ function Navbar() {
       </div>
 
       {/* Desktop Buttons */}
-      <div className="hidden lg:flex items-center space-x-4">
-        <Link to="/admin-panel" className="btn btn-sm btn-outline btn-primary">
-          Admin Panel
-        </Link>
-        <Link to="/register">
-          <button className="btn btn-sm btn-primary">Create Account</button>
-        </Link>
-      </div>
+      {isLoggin ? (
+        <div className="dropdown dropdown-end">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle avatar"
+          >
+            <div className="w-10 rounded-full">
+              <img
+                alt="Tailwind CSS Navbar component"
+                src={isLoggin.image}
+              />
+            </div>
+          </div>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content bg-white text-blue-600 rounded-box z-10 mt-3 w-52 p-2 shadow"
+          >
+            <li>
+              <a className="justify-between hover:bg-blue-100">
+                Profile
+              </a>
+            </li>
+            <li>
+              <a className="hover:bg-blue-100">Appointments</a>
+            </li>
+            <li>
+              <a className="hover:bg-blue-100">Logout</a>
+            </li>
+          </ul>
+        </div>
+      ) : (
+        <div className="hidden lg:flex items-center space-x-4">
+          <Link
+            to="/admin-panel"
+            className="btn btn-sm btn-outline btn-primary"
+          >
+            Admin Panel
+          </Link>
+          <Link to="/register">
+            <button className="btn btn-sm btn-primary">Create Account</button>
+          </Link>
+        </div>
+      )}
 
       {/* Mobile Hamburger */}
       <div className="lg:hidden flex-none">
