@@ -41,10 +41,22 @@ export default function DoctorProfile() {
     return <p className="text-center mt-10 text-red-500">Doctor not found</p>;
   }
 
+  // Helper: Shorten day name for mobile
+  const getDayLabel = (day) => {
+    const map = {
+      Monday: "Mon",
+      Tuesday: "Tue",
+      Wednesday: "Wed",
+      Thursday: "Thu",
+      Friday: "Fri",
+    };
+    return map[day] || day;
+  };
+
   return (
     <div className="w-full min-h-screen py-10 px-5 sm:px-10 lg:px-20 bg-gray-50">
       {/* Profile Section */}
-      <div className="flex flex-col lg:flex-row gap-10 mb-12">
+      <div className="flex flex-col lg:flex-row gap-10">
         {/* Left - Image */}
         <div className="w-full lg:w-1/3 flex justify-center">
           <img
@@ -54,71 +66,82 @@ export default function DoctorProfile() {
           />
         </div>
 
-        {/* Right - Details */}
+        {/* Right - Details + Timings */}
         <div className="w-full lg:w-2/3 bg-white shadow-lg rounded-xl p-6">
+          {/* Doctor Details */}
           <h2 className="text-2xl font-bold text-blue-600">{doctor.name}</h2>
           <p className="text-gray-600 text-lg mb-2">{doctor.specialization}</p>
           <p className="text-gray-500 mb-2">Experience: 4+ years</p>
           <p className="text-gray-700 mb-4">
-            {doctor.name} is an experienced {doctor.specialization} dedicated
-            to providing the highest level of patient care and treatment.
+            {doctor.name} is an experienced {doctor.specialization} dedicated to
+            providing the highest level of patient care and treatment.
           </p>
-          <p className="text-lg font-semibold text-gray-800 mb-2">
+          <p className="text-lg font-semibold text-gray-800 mb-6">
             Appointment Fee: <span className="text-green-600">₹500</span>
           </p>
-        </div>
-      </div>
 
-      {/* Timings */}
-      <div className="bg-white shadow-md rounded-xl p-6 mb-8">
-        <h3 className="text-xl font-bold text-gray-800 mb-4">Select Day</h3>
-        <div className="flex flex-wrap gap-3 mb-6">
-          {Object.keys(timings).map((day) => (
+          {/* Timings & Slots */}
+          <div className="bg-gray-50 border rounded-xl p-6">
+            {/* Headings */}
+            <h3 className="text-xl font-bold text-gray-800 mb-4 text-center lg:text-left">
+              Select Day
+            </h3>
+
+            {/* Days Row */}
+            <div className="flex justify-center lg:justify-start gap-3 mb-6">
+              {Object.keys(timings).map((day) => (
+                <button
+                  key={day}
+                  onClick={() => {
+                    setSelectedDay(day);
+                    setSelectedSlot(null);
+                  }}
+                  className={`px-3 py-2 rounded-lg font-medium text-sm sm:text-base ${
+                    selectedDay === day
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  }`}
+                >
+                  {/* Show full name on desktop, short form on mobile */}
+                  <span className="hidden sm:inline">{day}</span>
+                  <span className="sm:hidden">{getDayLabel(day)}</span>
+                </button>
+              ))}
+            </div>
+
+            <p className="text-gray-600 mb-4 text-center lg:text-left">
+              Opening Hours: {timings[selectedDay]}
+            </p>
+
+            {/* Slots */}
+            <h3 className="text-lg font-semibold text-gray-800 mb-3 text-center lg:text-left">
+              Select Time Slot
+            </h3>
+            <div className="flex flex-wrap justify-center lg:justify-start gap-3 mb-6">
+              {slots[selectedDay].map((slot, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSelectedSlot(slot)}
+                  className={`px-4 py-2 border rounded-lg ${
+                    selectedSlot === slot
+                      ? "bg-blue-500 text-white border-blue-600"
+                      : "border-blue-400 hover:bg-blue-100"
+                  }`}
+                >
+                  {slot}
+                </button>
+              ))}
+            </div>
+
+            {/* Book Button */}
             <button
-              key={day}
-              onClick={() => {
-                setSelectedDay(day);
-                setSelectedSlot(null); // reset slot when day changes
-              }}
-              className={`px-4 py-2 rounded-lg font-medium ${
-                selectedDay === day
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
+              onClick={handleBooking}
+              className="w-full text-white py-3 rounded-lg hover:bg-blue-700 transition btn btn-info"
             >
-              {day}
+              Book Appointment
             </button>
-          ))}
+          </div>
         </div>
-
-        <p className="text-gray-600 mb-4">
-          Opening Hours: {timings[selectedDay]}
-        </p>
-
-        {/* Slots */}
-        <div className="flex flex-wrap gap-3 mb-6">
-          {slots[selectedDay].map((slot, i) => (
-            <button
-              key={i}
-              onClick={() => setSelectedSlot(slot)}
-              className={`px-4 py-2 border rounded-lg ${
-                selectedSlot === slot
-                  ? "bg-blue-500 text-white border-blue-600"
-                  : "border-blue-400 hover:bg-blue-100"
-              }`}
-            >
-              {slot}
-            </button>
-          ))}
-        </div>
-
-        {/* Book Button */}
-        <button
-          onClick={handleBooking}
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
-        >
-          Book Appointment
-        </button>
       </div>
     </div>
   );
