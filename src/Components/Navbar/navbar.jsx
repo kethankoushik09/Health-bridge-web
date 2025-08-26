@@ -1,13 +1,58 @@
 // src/components/Navbar.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "../../utils/constant";
+import { removeUser, setUser } from "../../Redux/User/userSlice";
+import { toast } from "react-toastify";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const isLoggin = useSelector((state) => state.user);
-  console.log(isLoggin?.image);
+  const dispatch = useDispatch();
+  const { isLogin, data } = useSelector((state) => state.user);
+
+  async function FetchUserdata() {
+    console.log("fetch user");
+
+    try {
+      const res = await axios.get(BASE_URL + "/api/user/getProfile", {
+        withCredentials: true,
+      });
+      console.log(res.data);
+
+      if (res.data.success) {
+        dispatch(setUser(res.data.user));
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+  useEffect(() => {
+    if (!data) {
+      FetchUserdata();
+    }
+  }, []);
+
+  async function handleLogout() {
+    try {
+      dispatch(removeUser());
+      const res = await axios.post(
+        BASE_URL + "/api/user/logout",
+        {},
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+      } else {
+        throw new Error(res.data.message);
+      }
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
+  }
 
   return (
     <div className="navbar bg-white shadow-md px-6 sticky top-0 z-50">
@@ -38,7 +83,7 @@ function Navbar() {
       </div>
 
       {/* Desktop Buttons */}
-      {isLoggin ? (
+      {isLogin ? (
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}
@@ -46,10 +91,7 @@ function Navbar() {
             className="btn btn-ghost btn-circle avatar"
           >
             <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src={isLoggin.image}
-              />
+              <img alt="Tailwind CSS Navbar component" src={data.image} />
             </div>
           </div>
           <ul
@@ -57,14 +99,12 @@ function Navbar() {
             className="menu menu-sm dropdown-content bg-white text-blue-600 rounded-box z-10 mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a className="justify-between hover:bg-blue-100">
-                Profile
-              </a>
+              <a className="justify-between hover:bg-blue-100">Profile</a>
             </li>
             <li>
               <a className="hover:bg-blue-100">Appointments</a>
             </li>
-            <li>
+            <li onClick={handleLogout}>
               <a className="hover:bg-blue-100">Logout</a>
             </li>
           </ul>
