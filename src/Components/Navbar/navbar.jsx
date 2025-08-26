@@ -1,15 +1,59 @@
 // src/components/Navbar.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 import { useSelector } from "react-redux";
 import { User, CalendarCheck, LogOut } from "lucide-react";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "../../utils/constant";
+import { removeUser, setUser } from "../../Redux/User/userSlice";
+import { toast } from "react-toastify";
 
 function Navbar() {
-  const [isOpen, setIsOpen] = useState(true);
-  // const isLoggin = useSelector((state) => state.user);
-  const isLoggin = true;
-  // console.log(isLoggin?.image);
+  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { isLogin, data } = useSelector((state) => state.user);
+
+  async function FetchUserdata() {
+    console.log("fetch user");
+
+    try {
+      const res = await axios.get(BASE_URL + "/api/user/getProfile", {
+        withCredentials: true,
+      });
+      console.log(res.data);
+
+      if (res.data.success) {
+        dispatch(setUser(res.data.user));
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+  useEffect(() => {
+    if (!data) {
+      FetchUserdata();
+    }
+  }, []);
+
+  async function handleLogout() {
+    try {
+      dispatch(removeUser());
+      const res = await axios.post(
+        BASE_URL + "/api/user/logout",
+        {},
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+      } else {
+        throw new Error(res.data.message);
+      }
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
+  }
 
   return (
     <div className="navbar bg-white shadow-md px-6 sticky top-0 z-50">
@@ -40,16 +84,15 @@ function Navbar() {
       </div>
 
       {/* Desktop Buttons */}
-      {isLoggin ? (
+      {isLogin ? (
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-7 rounded-full  ring-offset-2">
-              <img alt="User Avatar" src={isLoggin.image} />
-               
+            <div className="w-10 rounded-full">
+              <img alt="Tailwind CSS Navbar component" src={data.image} />
             </div>
           </div>
           <ul
@@ -61,22 +104,25 @@ function Navbar() {
                 to="/profile"
                 className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 transition"
               >
-                 <User className="w-5 h-5 text-blue-600" />
+                <User className="w-5 h-5 text-blue-600" />
                 My Profile
               </Link>
+
+              <a className="justify-between hover:bg-blue-100">Profile</a>
             </li>
             <li>
               <Link
                 to="/appointments"
                 className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 transition"
               >
-                 <CalendarCheck className="w-5 h-5 text-blue-600" />
+                <CalendarCheck className="w-5 h-5 text-blue-600" />
                 Appointments
               </Link>
             </li>
+
             <li>
               <button className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 transition w-full text-left">
-                 <LogOut className="w-5 h-5 text-red-600" />
+                <LogOut className="w-5 h-5 text-red-600" />
                 <span className="text-red-600">Logout</span>
               </button>
             </li>
