@@ -1,6 +1,6 @@
 // src/components/Navbar.jsx
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 import { useSelector } from "react-redux";
 import { User, CalendarCheck, LogOut } from "lucide-react";
@@ -14,6 +14,7 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const { isLogin, data } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   async function FetchUserdata() {
     console.log("fetch user");
@@ -39,13 +40,15 @@ function Navbar() {
 
   async function handleLogout() {
     try {
-      dispatch(removeUser());
       const res = await axios.post(
         BASE_URL + "/api/user/logout",
         {},
         { withCredentials: true }
       );
       if (res.data.success) {
+        dispatch(removeUser());
+        navigate("/");
+
         toast.success(res.data.message);
       } else {
         throw new Error(res.data.message);
@@ -107,8 +110,6 @@ function Navbar() {
                 <User className="w-5 h-5 text-blue-600" />
                 My Profile
               </Link>
-
-              <a className="justify-between hover:bg-blue-100">Profile</a>
             </li>
             <li>
               <Link
@@ -121,7 +122,10 @@ function Navbar() {
             </li>
 
             <li>
-              <button className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 transition w-full text-left">
+              <button
+                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 transition w-full text-left"
+                onClick={handleLogout}
+              >
                 <LogOut className="w-5 h-5 text-red-600" />
                 <span className="text-red-600">Logout</span>
               </button>

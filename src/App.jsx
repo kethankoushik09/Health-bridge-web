@@ -24,6 +24,8 @@ export default function App() {
         <Route path="/register" element={<LoginForm/>} />
         <Route path="/appointment/:id" element={<DoctorProfile />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path= "/profile" element = {<ProfilePage/>}/>
+        <Route path="/appointments" element= {<MyAppointments/>}/>
       </Routes>
       <ToastContainer autoClose={500} />
     </div>
