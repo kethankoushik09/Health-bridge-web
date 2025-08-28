@@ -31,20 +31,20 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2 text-sm font-medium">
               <li>
-                <span className="font-semibold">Monday:</span> 8:00am - 9:00pm
+                <span className="font-semibold">Monday:</span> 10:00am - 8:00pm
               </li>
               <li>
-                <span className="font-semibold">Tuesday:</span> 8:00am - 9:00pm
+                <span className="font-semibold">Tuesday:</span> 10:00am - 8:00pm
               </li>
               <li>
-                <span className="font-semibold">Wednesday:</span> 8:00am -
-                9:00pm
+                <span className="font-semibold">Wednesday:</span> 10:00am -
+                8:00pm
               </li>
               <li>
-                <span className="font-semibold">Thursday:</span> 8:00am - 9:00pm
+                <span className="font-semibold">Thursday:</span> 10:00am - 8:00pm
               </li>
               <li>
-                <span className="font-semibold">Friday:</span> 8:00am - 7:00pm
+                <span className="font-semibold">Friday:</span> 10:00am - 8:00pm
               </li>
             </ul>
           </div>

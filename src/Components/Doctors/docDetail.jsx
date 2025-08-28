@@ -1,34 +1,50 @@
 import { useParams } from "react-router-dom";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { addAppointment } from "../../Redux/Appointments/appointmentsSlice";
-import Footer from "../Hero/footer";
+import { Link } from "react-router-dom";
 
 export default function DoctorProfile() {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const { id } = useParams();
-  const doctor = useSelector((state) =>
-    state.doctors.list.find((doc) => doc.id === parseInt(id))
-  );
+  const doctors = useSelector((state) => state.doctors.list);
 
-  const [selectedDay, setSelectedDay] = useState("Monday");
+  const doctor = doctors.find((doc) => doc.id === parseInt(id));
+
+  // Generate 7 days from today
+  const today = new Date();
+  const next7Days = [...Array(7)].map((_, i) => {
+    const d = new Date();
+    d.setDate(today.getDate() + i);
+    return {
+      fullDate: d.toISOString().split("T")[0],
+      label: `${d.getDate()} ${d.toLocaleDateString("en-US", {
+        weekday: "short",
+      })}`,
+      weekday: d.toLocaleDateString("en-US", { weekday: "long" }),
+    };
+  });
+
+  const [selectedDay, setSelectedDay] = useState(next7Days[0]);
   const [selectedSlot, setSelectedSlot] = useState(null);
 
-  const timings = {
-    Monday: "8:00am - 9:00pm",
-    Tuesday: "8:00am - 9:00pm",
-    Wednesday: "8:00am - 9:00pm",
-    Thursday: "8:00am - 9:00pm",
-    Friday: "8:00am - 7:00pm",
+  // Generate slots between 10am - 8pm
+  const generateSlots = () => {
+    const slots = [];
+    for (let hour = 10; hour < 20; hour++) {
+      for (let min = 0; min < 60; min += 30) {
+        if (hour === 13) continue; // lunch break
+        const time = new Date();
+        time.setHours(hour, min, 0);
+        slots.push(
+          time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+        );
+      }
+    }
+    return slots;
   };
 
-  const slots = {
-    Monday: ["9:00am", "10:30am", "1:00pm", "3:30pm", "6:00pm"],
-    Tuesday: ["9:15am", "11:00am", "2:00pm", "4:00pm", "7:30pm"],
-    Wednesday: ["8:30am", "10:00am", "12:30pm", "5:00pm", "8:30pm"],
-    Thursday: ["9:45am", "11:30am", "2:15pm", "4:45pm", "6:30pm"],
-    Friday: ["9:00am", "10:45am", "1:15pm", "3:45pm", "5:30pm"],
-  };
+  const slots = generateSlots();
 
   const handleBooking = () => {
     if (!selectedSlot) {
@@ -39,14 +55,14 @@ export default function DoctorProfile() {
     const appointment = {
       id: Date.now(),
       doctor,
-      day: selectedDay,
+      day: selectedDay.weekday,
+      date: selectedDay.fullDate,
       time: selectedSlot,
     };
 
     dispatch(addAppointment(appointment));
-
     alert(
-      `✅ Appointment booked with ${doctor.name} on ${selectedDay} at ${selectedSlot}`
+      `✅ Appointment booked with ${doctor.name} on ${selectedDay.label} at ${selectedSlot}`
     );
   };
 
@@ -54,21 +70,13 @@ export default function DoctorProfile() {
     return <p className="text-center mt-10 text-red-500">Doctor not found</p>;
   }
 
-  // Helper: Shorten day name for mobile
-  const getDayLabel = (day) => {
-    const map = {
-      Monday: "Mon",
-      Tuesday: "Tue",
-      Wednesday: "Wed",
-      Thursday: "Thu",
-      Friday: "Fri",
-    };
-    return map[day] || day;
-  };
+  // 👉 Find related doctors (same specialization, exclude current doctor)
+  const relatedDoctors = doctors.filter(
+    (doc) => doc.specialization === doctor.specialization && doc.id !== doctor.id
+  );
 
   return (
     <div className="w-full min-h-screen py-10 px-5 sm:px-10 lg:px-20 bg-gray-50">
-      {/* Profile Section */}
       <div className="flex flex-col lg:flex-row gap-10">
         {/* Left - Image */}
         <div className="w-full lg:w-1/3 flex justify-center">
@@ -79,9 +87,8 @@ export default function DoctorProfile() {
           />
         </div>
 
-        {/* Right - Details + Timings */}
+        {/* Right - Details + Slots */}
         <div className="w-full lg:w-2/3 bg-white shadow-lg rounded-xl p-6">
-          {/* Doctor Details */}
           <h2 className="text-2xl font-bold text-blue-600">{doctor.name}</h2>
           <p className="text-gray-600 text-lg mb-2">{doctor.specialization}</p>
           <p className="text-gray-500 mb-2">Experience: 4+ years</p>
@@ -93,70 +100,93 @@ export default function DoctorProfile() {
             Appointment Fee: <span className="text-green-600">₹500</span>
           </p>
 
-          {/* Timings & Slots */}
+          {/* Days Selection */}
           <div className="bg-gray-50 border rounded-xl p-6">
-            {/* Headings */}
             <h3 className="text-xl font-bold text-gray-800 mb-4 text-center lg:text-left">
               Select Day
             </h3>
-
-            {/* Days Row */}
-            <div className="flex justify-center lg:justify-start gap-3 mb-6">
-              {Object.keys(timings).map((day) => (
+            <div className="flex flex-wrap justify-center lg:justify-start gap-3 mb-6">
+              {next7Days.map((day, i) => (
                 <button
-                  key={day}
+                  key={i}
                   onClick={() => {
                     setSelectedDay(day);
                     setSelectedSlot(null);
                   }}
                   className={`px-3 py-2 rounded-lg font-medium text-sm sm:text-base ${
-                    selectedDay === day
+                    selectedDay.fullDate === day.fullDate
                       ? "bg-blue-500 text-white"
                       : "bg-gray-200 text-gray-700"
                   }`}
                 >
-                  {/* Show full name on desktop, short form on mobile */}
-                  <span className="hidden sm:inline">{day}</span>
-                  <span className="sm:hidden">{getDayLabel(day)}</span>
+                  {day.label}
                 </button>
               ))}
             </div>
-
-            <p className="text-gray-600 mb-4 text-center lg:text-left">
-              Opening Hours: {timings[selectedDay]}
-            </p>
 
             {/* Slots */}
             <h3 className="text-lg font-semibold text-gray-800 mb-3 text-center lg:text-left">
               Select Time Slot
             </h3>
-            <div className="flex flex-wrap justify-center lg:justify-start gap-3 mb-6">
-              {slots[selectedDay].map((slot, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSelectedSlot(slot)}
-                  className={`px-4 py-2 border rounded-lg ${
-                    selectedSlot === slot
-                      ? "bg-blue-500 text-white border-blue-600"
-                      : "border-blue-400 hover:bg-blue-100"
-                  }`}
-                >
-                  {slot}
-                </button>
-              ))}
+            <div className="overflow-x-auto scrollbar-hide">
+              <div className="flex space-x-3 pb-2">
+                {slots.map((slot, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedSlot(slot)}
+                    className={`px-2 py-2 border rounded-lg min-w-[100px] text-center transition
+                      ${
+                        selectedSlot === slot
+                          ? "bg-blue-500 text-white border-blue-600"
+                          : "border-blue-400 hover:bg-blue-100"
+                      }`}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Book Button */}
             <button
               onClick={handleBooking}
-              className="w-full text-white py-3 rounded-lg hover:bg-blue-700 transition btn btn-info"
+              className="text-white py-3 rounded-lg hover:bg-blue-700 transition btn btn-info"
             >
               Book Appointment
             </button>
           </div>
         </div>
       </div>
-      <Footer/>
+
+      {/* Related Doctors Section */}
+      {relatedDoctors.length > 0 && (
+        <div className="mt-16">
+          <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+            Other {doctor.specialization}s
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {relatedDoctors.map((doc) => (
+              <Link key={doc.id} to={`/appointment/${doc.id}`} className="block">
+                <div className="card bg-blue-50 shadow-md hover:shadow-xl transition cursor-pointer">
+                  <figure className="px-6 pt-6">
+                    <img
+                      src={doc.image}
+                      alt={doc.name}
+                      className="rounded-xl border-4 border-white shadow-md h-[250px] w-[250px] object-cover"
+                    />
+                  </figure>
+                  <div className="card-body items-center text-center p-4">
+                    <h3 className="card-title text-base font-semibold text-gray-800">
+                      {doc.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">{doc.specialization}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

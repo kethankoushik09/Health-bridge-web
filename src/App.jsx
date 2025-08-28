@@ -9,6 +9,7 @@ import AboutPage from "./pages/About/about.jsx";
 import ProfilePage from "./pages/Profile/profile.jsx";
 import MyAppointments from "./Components/Profile/myAppointments.jsx";
 import ContactPage from "./pages/Contact/ContactPage.jsx";
+import DocAppPage from "./pages/DoctorAppPage/docAppPage.jsx";
 
 export default function App() {
   return (
@@ -21,11 +22,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/all-doctors" element={<DocPage />} />
         <Route path="/register" element={<LoginForm />} />
-        <Route path="/appointment/:id" element={<DoctorProfile />} />
+        <Route path="/appointment/:id" element={<DocAppPage />} />
         <Route path="/about" element={<AboutPage />} />
-
         <Route path="/contact" element={<ContactPage />} />
-
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/appointments" element={<MyAppointments />} />
       </Routes>
