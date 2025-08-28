@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar/navbar.jsx";
 import DocPage from "./pages/AllDoctors/Doctors.jsx";
 import LoginForm from "./Components/Login/login.jsx";
-// import DoctorProfile
 import Home from "./pages/Home/home.jsx";
 import { ToastContainer } from "react-toastify";
 import DoctorProfile from "./Components/Doctors/docDetail.jsx";
@@ -12,7 +11,6 @@ import MyAppointments from "./Components/Profile/myAppointments.jsx";
 import ContactPage from "./pages/Contact/ContactPage.jsx";
 
 export default function App() {
-
   return (
     <div>
       {/* Navbar visible on all pages */}
@@ -22,11 +20,14 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/all-doctors" element={<DocPage />} />
-        <Route path="/register" element={<LoginForm/>} />
+        <Route path="/register" element={<LoginForm />} />
         <Route path="/appointment/:id" element={<DoctorProfile />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage/>}/>
-       
+
+        <Route path="/contact" element={<ContactPage />} />
+
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/appointments" element={<MyAppointments />} />
       </Routes>
       <ToastContainer autoClose={500} />
     </div>
