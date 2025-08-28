@@ -9,6 +9,7 @@ import DoctorProfile from "./Components/Doctors/docDetail.jsx";
 import AboutPage from "./pages/About/about.jsx";
 import ProfilePage from "./pages/Profile/profile.jsx";
 import MyAppointments from "./Components/Profile/myAppointments.jsx";
+import ContactPage from "./pages/Contact/ContactPage.jsx";
 
 export default function App() {
 
@@ -24,6 +25,8 @@ export default function App() {
         <Route path="/register" element={<LoginForm/>} />
         <Route path="/appointment/:id" element={<DoctorProfile />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage/>}/>
+       
       </Routes>
       <ToastContainer autoClose={500} />
     </div>

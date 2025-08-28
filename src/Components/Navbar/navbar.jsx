@@ -14,7 +14,7 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const { isLogin, data } = useSelector((state) => state.user);
-
+//  const isLogin=true;
   async function FetchUserdata() {
     console.log("fetch user");
 

@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import { useState } from "react";
 import { addAppointment } from "../../Redux/Appointments/appointmentsSlice";
+import Footer from "../Hero/footer";
 
 export default function DoctorProfile() {
   const dispatch=useDispatch()
@@ -155,6 +156,7 @@ export default function DoctorProfile() {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }
