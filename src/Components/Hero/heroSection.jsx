@@ -1,6 +1,7 @@
 // src/components/Hero.jsx
 import React from "react";
 import heroImage from "../../assets/hero.png"; // replace with your hero image path
+import { Link } from "react-router-dom";
 
 function Hero() {
   return (
@@ -21,7 +22,9 @@ function Hero() {
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-black mb-6">
             Book appointments with top doctors anytime, anywhere.
           </p>
-          <button className="btn btn-info btn-md sm:btn-lg">Book Appointment</button>
+          <Link to="/all-doctors">
+            <button className="btn btn-info btn-md sm:btn-lg">Book Appointment</button>
+          </Link>
         </div>
       </div>
     </section>

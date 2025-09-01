@@ -26,7 +26,7 @@ function FindBySpeciality() {
           {specialties.map((spec, idx) => (
             <Link
               key={idx}
-              to={spec.link}
+              to={`/all-doctors/${spec.name}`} 
               className="flex flex-col items-center min-w-[90px] lg:min-w-[150px] snap-start"
             >
               <img
