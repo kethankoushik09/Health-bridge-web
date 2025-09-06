@@ -1,5 +1,5 @@
-import Contact from "../../Components/Contact/contact";
-import Footer from "../../Components/Hero/footer";
+import Contact from "../../Components/Contact/contact.jsx";
+import Footer from "../../Components/Hero/footer.jsx";
 
 function ContactPage() {
   return (

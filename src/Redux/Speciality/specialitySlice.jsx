@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { specialityList } from "./specialityData"
+import { specialityList } from "./specialityData.jsx"
 
 const specialitySlice = createSlice({
   name: "speciality",

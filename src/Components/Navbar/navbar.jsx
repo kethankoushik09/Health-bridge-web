@@ -6,8 +6,8 @@ import { useSelector } from "react-redux";
 import { User, CalendarCheck, LogOut } from "lucide-react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { BASE_URL } from "../../utils/constant";
-import { removeUser, setUser } from "../../Redux/User/userSlice";
+import { BASE_URL } from "../../utils/constant.js";
+import { removeUser, setUser } from "../../Redux/User/userSlice.js";
 import { toast } from "react-toastify";
 
 function Navbar() {
