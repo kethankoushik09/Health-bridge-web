@@ -1,5 +1,5 @@
-import About from "../../Components/About/about";
-import Footer from "../../Components/Hero/footer";
+import About from "../../Components/About/about.jsx";
+import Footer from "../../Components/Hero/footer.jsx";
 
 function AboutPage() {
   return <div>

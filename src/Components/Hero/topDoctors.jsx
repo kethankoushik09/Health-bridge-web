@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 import { Link } from "react-router-dom";
-import { fetchDoctors } from "../../Redux/doctors/doctorSlice";
+import { fetchDoctors } from "../../Redux/doctors/doctorSlice.js";
 
 export default function TopDoctors() {
   const dispatch = useDispatch();

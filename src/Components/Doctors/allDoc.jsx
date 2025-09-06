@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchDoctors } from "../../Redux/doctors/doctorSlice";
+import { fetchDoctors } from "../../Redux/doctors/doctorSlice.js";
 
 function AllDoc() {
   const dispatch = useDispatch();

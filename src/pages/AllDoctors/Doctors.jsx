@@ -1,5 +1,5 @@
-import AllDoc from "../../Components/Doctors/allDoc";
-import Footer from "../../Components/Hero/footer";
+import AllDoc from "../../Components/Doctors/allDoc.jsx";
+import Footer from "../../Components/Hero/footer.jsx";
 
 function DocPage() {
   return <div>

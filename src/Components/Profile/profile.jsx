@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Mail, Phone, Home, User, Calendar } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { BASE_URL } from "../../utils/constant";
+import { BASE_URL } from "../../utils/constant.js";
 import { toast } from "react-toastify";
 import { setUser } from "../../Redux/User/userSlice.js";
 import Lottie from "lottie-react";

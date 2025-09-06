@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
-import { BASE_URL } from "../../utils/constant";
+import { BASE_URL } from "../../utils/constant.js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../Redux/User/userSlice";
+import { setUser } from "../../Redux/User/userSlice.js";
 
 export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(true);

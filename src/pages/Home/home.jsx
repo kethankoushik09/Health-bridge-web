@@ -1,8 +1,8 @@
-import TopDoctors from "../../Components/Hero/topDoctors";
-import FindBySpeciality from "../../Components/Hero/findBySpeciality";
-import HeroSection from "../../Components/Hero/heroSection";
-import WhatMakesUsBest from "../../Components/Hero/WhatMakesUsBest";
-import Footer from "../../Components/Hero/footer";
+import TopDoctors from "../../Components/Hero/topDoctors.jsx";
+import FindBySpeciality from "../../Components/Hero/findBySpeciality.jsx";
+import HeroSection from "../../Components/Hero/heroSection.jsx";
+import WhatMakesUsBest from "../../Components/Hero/WhatMakesUsBest.jsx";
+import Footer from "../../Components/Hero/footer.jsx";
 
 
 function Home()
