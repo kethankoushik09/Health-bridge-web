@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../utils/constant";
 
 export default function DoctorProfile() {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ export default function DoctorProfile() {
 
   try {
     const response = await axios.post(
-      "http://localhost:4000/api/user/bookAppointment",
+      `${BASE_URL}/api/user/bookAppointment`,
       {
         docId: doctor._id,
         slotDate: selectedDay.fullDate,

@@ -1,9 +1,10 @@
 // src/Redux/Doctors/doctorsSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { BASE_URL } from "../../utils/constant";
 
 export const fetchDoctors = createAsyncThunk("doctors/fetchDoctors", async () => {
-  const res = await axios.get("http://localhost:4000/api/admin/allDoctors");  
+  const res = await axios.get(`${BASE_URL}/api/admin/allDoctors`);
   return res.data.doctors;
 });
 

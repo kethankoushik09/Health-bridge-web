@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../utils/constant";
 
 export default function MyAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -10,7 +11,7 @@ export default function MyAppointments() {
   const fetchAppointments = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/user/getAppointments",
+        `${BASE_URL}/api/user/getAppointments`,
         { withCredentials: true }
       );
       if (response.data.success) {
@@ -33,7 +34,7 @@ export default function MyAppointments() {
    const handleCancel = async (appointmentId) => {
   try {
     const response = await axios.post(
-      "http://localhost:4000/api/user/cancelAppointment",
+      `${BASE_URL}/api/user/cancelAppointment`,
       { appointmentId },
       { withCredentials: true }
     );
