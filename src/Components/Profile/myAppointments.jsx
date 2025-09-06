@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function MyAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -29,9 +30,30 @@ export default function MyAppointments() {
     fetchAppointments();
   }, []);
 
-  const handlePayNow = (appointmentId) => {
-    alert(`Redirecting to payment for appointment ${appointmentId}`);
-    // You can integrate your payment gateway here
+   const handleCancel = async (appointmentId) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:4000/api/user/cancelAppointment",
+      { appointmentId },
+      { withCredentials: true }
+    );
+
+    if (response.data.success) {
+      toast.success("Appointment cancelled successfully");
+      fetchAppointments(); // refresh list
+    } else {
+      toast.error(response.data.message);
+    }
+  } catch (err) {
+    console.error(err);
+    toast.error("Something went wrong while cancelling appointment");
+  }
+};
+
+  // to check if appointment is already in the past
+  const isPastAppointment = (slotDate, slotTime) => {
+    const appointmentDateTime = new Date(`${slotDate} ${slotTime}`);
+    return appointmentDateTime < new Date();
   };
 
   if (loading) return <p className="text-center mt-10">Loading...</p>;
@@ -40,62 +62,75 @@ export default function MyAppointments() {
     return <p className="text-center mt-10">No appointments found</p>;
 
   return (
-    <div className="w-full min-h-screen py-10 px-5 sm:px-10 lg:px-20 bg-gray-50">
+    <div className="w-full min-h-screen py-10 px-5 sm:px-10 lg:px-40 bg-gray-50">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
         My Appointments
       </h2>
 
       <div className="space-y-6">
-        {appointments.map((appt) => (
-          <div
-            key={appt._id}
-            className="flex flex-col sm:flex-row items-center border p-4 m-8 gap-9"
-          >
-            {/* Doctor Image */}
-            <img
-              src={appt.docData.image}
-              alt={appt.docData.name}
-              className="w-40 h-40 rounded-xl object-cover border-2 border-gray-200"
-            />
+        {appointments.map((appt) => {
+          // 🔹 Decide appointment status
+          let status = "Scheduled";
+          let statusColor = "text-yellow-600";
 
-            {/* Doctor Details */}
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-800">
-                {appt.docData.name}
-              </h3>
-              <p className="text-gray-600">{appt.docData.speciality}</p>
-              <p className="text-gray-700">
-                <span className="font-semibold">Date:</span>{" "}
-                {new Date(appt.slotDate).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </p>
-              <p className="text-gray-700">
-                <span className="font-semibold">Time:</span> {appt.slotTime}
-              </p>
-              <p className="text-gray-700">
-                <span className="font-semibold">Fee:</span> ${appt.docData.fees}
-              </p>
+          if (appt.cancelled) {
+            status = "Cancelled";
+            statusColor = "text-red-600";
+          } else if (isPastAppointment(appt.slotDate, appt.slotTime)) {
+            status = "Completed";
+            statusColor = "text-green-600";
+          }
+
+          return (
+            <div
+              key={appt._id}
+              className="flex flex-col sm:flex-row items-center border p-4 m-8 gap-9"
+            >
+              {/* Doctor Image */}
+              <img
+                src={appt.docData.image}
+                alt={appt.docData.name}
+                className="w-40 h-40 rounded-xl object-cover border-2 border-gray-200"
+              />
+
+              {/* Doctor Details */}
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {appt.docData.name}
+                </h3>
+                <p className="text-gray-600">{appt.docData.speciality}</p>
+                <p className="text-gray-700">
+                  <span className="font-semibold">Date:</span>{" "}
+                  {new Date(appt.slotDate).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-semibold">Time:</span> {appt.slotTime}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-semibold">Fee:</span> $
+                  {appt.docData.fees}
+                </p>
+                {/* 🔹 Appointment Status */}
+                <p className={`font-semibold ${statusColor}`}>{status}</p>
+              </div>
+
+              {/* 🔹 Cancel button only if scheduled */}
+              {!appt.cancelled && !isPastAppointment(appt.slotDate, appt.slotTime) ? (
+                <button
+                  onClick={() => handleCancel(appt._id)}
+                  className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition"
+                >
+                  Cancel
+                </button>
+              ) : null}
             </div>
-
-            {/* Pay Button */}
-            {!appt.payment && (
-              <button
-                onClick={() => handlePayNow(appt._id)}
-                className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition"
-              >
-                Pay Now
-              </button>
-            )}
-
-            {appt.payment && (
-              <span className="text-green-600 font-semibold">Paid</span>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
