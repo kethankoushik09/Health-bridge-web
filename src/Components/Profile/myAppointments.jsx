@@ -10,10 +10,9 @@ export default function MyAppointments() {
   // Fetch appointments from backend
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/api/user/getAppointments`,
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${BASE_URL}/api/user/getAppointments`, {
+        withCredentials: true,
+      });
       if (response.data.success) {
         setAppointments(response.data.appointments);
       } else {
@@ -31,25 +30,25 @@ export default function MyAppointments() {
     fetchAppointments();
   }, []);
 
-   const handleCancel = async (appointmentId) => {
-  try {
-    const response = await axios.post(
-      `${BASE_URL}/api/user/cancelAppointment`,
-      { appointmentId },
-      { withCredentials: true }
-    );
+  const handleCancel = async (appointmentId) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/user/cancelAppointment`,
+        { appointmentId },
+        { withCredentials: true }
+      );
 
-    if (response.data.success) {
-      toast.success("Appointment cancelled successfully");
-      fetchAppointments(); // refresh list
-    } else {
-      toast.error(response.data.message);
+      if (response.data.success) {
+        toast.success("Appointment cancelled successfully");
+        fetchAppointments(); // refresh list
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong while cancelling appointment");
     }
-  } catch (err) {
-    console.error(err);
-    toast.error("Something went wrong while cancelling appointment");
-  }
-};
+  };
 
   // to check if appointment is already in the past
   const isPastAppointment = (slotDate, slotTime) => {
@@ -60,7 +59,13 @@ export default function MyAppointments() {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   if (appointments.length === 0)
-    return <p className="text-center mt-10">No appointments found</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <p className="text-center text-gray-700 text-lg">
+          No appointments found
+        </p>
+      </div>
+    );
 
   return (
     <div className="w-full min-h-screen py-10 px-5 sm:px-10 lg:px-40 bg-gray-50">
@@ -121,7 +126,8 @@ export default function MyAppointments() {
               </div>
 
               {/* 🔹 Cancel button only if scheduled */}
-              {!appt.cancelled && !isPastAppointment(appt.slotDate, appt.slotTime) ? (
+              {!appt.cancelled &&
+              !isPastAppointment(appt.slotDate, appt.slotTime) ? (
                 <button
                   onClick={() => handleCancel(appt._id)}
                   className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition"

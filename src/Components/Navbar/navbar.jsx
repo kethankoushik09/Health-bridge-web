@@ -203,7 +203,8 @@ function Navbar() {
                 Contact
               </Link>
             </li>
-            <li>
+            {!isLogin && (<>
+             <li>
               <a
             href="https://wellness-admin-alpha.vercel.app/login"
             target="_blank"
@@ -219,6 +220,7 @@ function Navbar() {
                 </button>
               </Link>
             </li>
+            </>)}
           </ul>
         </div>
       )}
