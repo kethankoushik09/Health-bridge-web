@@ -64,20 +64,13 @@ export default function MyAppointments() {
       <Lottie
         animationData={loading}
         loop={true}
-        className="w-40 h-40" // adjust size
+        className="w-40 h-40"
       />
     </div>
   );
 
 
-  if (appointments.length === 0)
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <p className="text-center text-gray-700 text-lg">
-          No appointments found
-        </p>
-      </div>
-    );
+ if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
     <div className="w-full min-h-screen py-10 px-5 sm:px-10 lg:px-40 bg-gray-50">
