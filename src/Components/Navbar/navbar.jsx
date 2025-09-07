@@ -139,7 +139,6 @@ function Navbar() {
           <a
             href="https://wellness-admin-alpha.vercel.app/login"
             target="_blank"
-            rel="noopener noreferrer"
             className="btn btn-sm btn-outline btn-primary"
           >
             Admin Panel
@@ -205,9 +204,13 @@ function Navbar() {
               </Link>
             </li>
             <li>
-              <Link to="/admin-panel" onClick={() => setIsOpen(false)}>
-                Admin Panel
-              </Link>
+              <a
+            href="https://wellness-admin-alpha.vercel.app/login"
+            target="_blank"
+            className="btn btn-sm btn-outline btn-primary"
+          >
+            Admin Panel
+          </a>
             </li>
             <li>
               <Link to="/register" onClick={() => setIsOpen(false)}>
