@@ -137,7 +137,7 @@ function Navbar() {
       ) : (
         <div className="hidden lg:flex items-center space-x-4">
           <Link
-            to="/admin-panel"
+            to="/https://wellness-admin-alpha.vercel.app/login"
             className="btn btn-sm btn-outline btn-primary"
           >
             Admin Panel
