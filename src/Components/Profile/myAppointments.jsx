@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../utils/constant";
+import Lottie from "lottie-react";
+import loading from "../../assets/loading.json";  
 
 export default function MyAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -56,7 +58,17 @@ export default function MyAppointments() {
     return appointmentDateTime < new Date();
   };
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (loading)
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-white">
+      <Lottie
+        animationData={loading}
+        loop={true}
+        className="w-40 h-40" // adjust size
+      />
+    </div>
+  );
+
 
   if (appointments.length === 0)
     return (
