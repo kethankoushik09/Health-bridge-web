@@ -58,17 +58,20 @@ export default function MyAppointments() {
     return appointmentDateTime < new Date();
   };
 
-  if (loading)
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
-      <Lottie
-        animationData={loading}
-        loop={true}
-        className="w-40 h-40"
-      />
-    </div>
-  );
+  // if (loading)
+  // return (
+  //   <div className="flex items-center justify-center min-h-screen bg-white">
+  //     <Lottie
+  //       animationData={loading}
+  //       loop={true}
+  //       className="w-40 h-40"
+  //     />
+  //   </div>
+  // );
 
+  if (appointments.length === 0 && !loading) {
+    return <p className="text-center mt-10">No appointments found</p>;
+  }
 
  if (loading) return <p className="text-center mt-10">Loading...</p>;
 
